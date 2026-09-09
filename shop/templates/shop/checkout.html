@@ -1,0 +1,78 @@
+<!DOCTYPE html>
+<html lang="ky">
+<head>
+    <meta charset="UTF-8">
+    <title>Төлөм бөлүмү (Checkout)</title>
+    <style>
+        body { font-family: 'Segoe UI', sans-serif; background: linear-gradient(135deg, #667eea 0%, #764ba2 100%); margin: 0; padding: 20px; color: #333; }
+        .container { max-width: 700px; margin: 50px auto; background: white; border-radius: 20px; padding: 30px; box-shadow: 0 10px 30px rgba(0,0,0,0.2); }
+        h1 { text-align: center; margin-bottom: 30px; }
+
+        .cart-item {
+            display: flex;
+            align-items: center;
+            border-bottom: 1px solid #eee;
+            padding: 15px 0;
+            gap: 15px;
+        }
+
+        .item-img { width: 80px; height: 80px; object-fit: cover; border-radius: 10px; }
+        .item-placeholder { width: 80px; height: 80px; background: #f0f0f0; border-radius: 10px; display: flex; align-items: center; justify-content: center; color: #999; font-size: 12px; }
+
+        .item-info { flex: 1; }
+        .item-title { font-weight: bold; font-size: 18px; }
+        .item-details { color: #777; font-size: 14px; }
+
+        .total-box { text-align: right; font-size: 24px; font-weight: bold; margin: 20px 0; padding-top: 20px; border-top: 2px solid #eee; }
+
+        .btn { display: block; width: 100%; padding: 15px; border: none; border-radius: 10px; font-size: 18px; cursor: pointer; text-decoration: none; text-align: center; margin-top: 10px; }
+        .btn-confirm { background-color: #4CAF50; color: white; }
+        .btn-back { background-color: #667eea; color: white; }
+
+        .empty-msg { text-align: center; color: #777; font-size: 18px; margin-bottom: 20px; }
+    </style>
+</head>
+<body>
+    <div class="container">
+        <h1>✅ Буйрутманы тастыктоо</h1>
+
+        {% if items %}
+            <div class="cart-items">
+                {% for item in items %}
+                    <div class="cart-item">
+                        <!-- Сүрөт бөлүгү -->
+                        {% if item.book.image %}
+                            <img src="{{ item.book.image.url }}" alt="{{ item.book.title }}" class="item-img">
+                        {% else %}
+                            <div class="item-placeholder">Сүрөт жок</div>
+                        {% endif %}
+
+                        <!-- Товар жөнүндө маалымат -->
+                        <div class="item-info">
+                            <div class="item-title">{{ item.book.title }}</div>
+                            <div class="item-details">
+                                {{ item.quantity }} даана x {{ item.book.price }} сом = <strong>{{ item.total_price }} сом</strong>
+                            </div>
+                        </div>
+                    </div>
+                {% endfor %}
+            </div>
+
+            <div class="total-box">
+                Жалпы сумма: {{ total }} сом
+            </div>
+
+            <!-- Буйрутманы тастыктоо баскычы -->
+            <form method="post" action="{% url 'checkout' %}">
+                {% csrf_token %}
+                <button type="submit" class="btn btn-confirm">💳 Буйрутманы тастыктоо</button>
+            </form>
+
+        {% else %}
+            <p class="empty-msg">Корзинаңыз бош. Буйрутма берүү үчүн адегенде товар кошуңуз.</p>
+        {% endif %}
+
+        <a href="{% url 'cart' %}" class="btn btn-back">← Корзинага кайтуу</a>
+    </div>
+</body>
+</html>

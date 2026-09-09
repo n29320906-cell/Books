@@ -1,0 +1,21 @@
+{% extends 'shop/base.html' %}
+
+{% block content %}
+<h2>{{ genre.name }} жанрындагы китептер</h2>
+<a href="{% url 'shop:book_list' %}" class="btn btn-secondary mb-3">← Бардык китептер</a>
+<div class="row">
+    {% for book in books %}
+        <div class="col-md-4 mb-3">
+            <div class="card">
+                <div class="card-body">
+                    <h5>{{ book.title }}</h5>
+                    <p>{{ book.author }}</p>
+                    <a href="{% url 'shop:book_detail' book.id %}" class="btn btn-primary btn-sm">Көрүү</a>
+                </div>
+            </div>
+        </div>
+    {% empty %}
+        <p>Бул жанрда китептер жок.</p>
+    {% endfor %}
+</div>
+{% endblock %}

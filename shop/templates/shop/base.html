@@ -1,0 +1,231 @@
+<!DOCTYPE html>
+<html lang="ky">
+<head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <title>Китеп дүкөнү</title>
+    {% load static %}
+
+<link rel="stylesheet" href="{% static 'css/style.css' %}">
+    <style>
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+            font-family: system-ui, -apple-system, sans-serif;
+        }
+        body {
+            background: #f8f9fa;
+            padding: 20px;
+        }
+        .header {
+            display: flex;
+            align-items: center;
+            justify-content: space-between;
+            background: #fff;
+            padding: 15px 30px;
+            border-radius: 12px;
+            box-shadow: 0 2px 8px rgba(0,0,0,0.06);
+            margin-bottom: 25px;
+            flex-wrap: wrap;
+            gap: 10px;
+        }
+        .logo { font-size: 24px; font-weight: 700; color: #2c3e50; }
+        .nav { display: flex; gap: 25px; align-items: center; flex-wrap: wrap; }
+        .nav a { text-decoration: none; color: #34495e; font-weight: 500; transition: 0.2s; }
+        .nav a:hover { color: #e67e22; }
+        .cart {
+            background: #e67e22;
+            color: #fff !important;
+            padding: 8px 18px;
+            border-radius: 30px;
+            font-weight: 600;
+        }
+        .cart span {
+            background: #c0392b;
+            padding: 2px 10px;
+            border-radius: 20px;
+            margin-left: 8px;
+            font-size: 14px;
+        }
+        .admin-btn {
+            background: #eee;
+            padding: 6px 15px;
+            border-radius: 20px;
+            color: #7f8c8d;
+            font-size: 14px;
+            border: 1px dashed #bdc3c7;
+            cursor: not-allowed;
+            display: none;  /* жашыруун - админ гана */
+        }
+        .filters {
+            display: flex;
+            gap: 20px;
+            background: #fff;
+            padding: 15px 25px;
+            border-radius: 12px;
+            margin-bottom: 30px;
+            box-shadow: 0 2px 8px rgba(0,0,0,0.04);
+            flex-wrap: wrap;
+        }
+        .filters select {
+            padding: 10px 18px;
+            border: 1px solid #ddd;
+            border-radius: 8px;
+            background: #fff;
+            font-size: 15px;
+            cursor: pointer;
+            outline: none;
+        }
+        .filters select:focus { border-color: #e67e22; }
+        .book-grid {
+            display: grid;
+            grid-template-columns: repeat(auto-fill, minmax(220px,1fr));
+            gap: 25px;
+        }
+        .book-card {
+            background: #fff;
+            border-radius: 16px;
+            padding: 20px 15px;
+            box-shadow: 0 4px 12px rgba(0,0,0,0.06);
+            transition: 0.25s ease;
+            display: flex;
+            flex-direction: column;
+            border: 1px solid #f0f0f0;
+        }
+        .book-card:hover { transform: translateY(-6px); box-shadow: 0 12px 28px rgba(0,0,0,0.1); }
+        .book-cover {
+            width: 100%;
+            height: 160px;
+            background: linear-gradient(145deg, #ecf0f1, #dfe6e9);
+            border-radius: 12px;
+            margin-bottom: 14px;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            font-size: 48px;
+            color: #b2bec3;
+            font-weight: bold;
+        }
+        .book-title { font-size: 18px; font-weight: 700; color: #2d3436; margin-bottom: 4px; }
+        .book-author { font-size: 14px; color: #636e72; margin-bottom: 8px; }
+        .book-rating { display: flex; gap: 2px; color: #fdcb6e; font-size: 16px; margin-bottom: 8px; }
+        .book-price { font-size: 22px; font-weight: 700; color: #e67e22; margin-bottom: 6px; }
+        .book-stock { font-size: 13px; color: #27ae60; font-weight: 600; margin-bottom: 14px; }
+        .book-stock.out { color: #e74c3c; }
+        .add-btn {
+            background: #e67e22;
+            border: none;
+            color: #fff;
+            padding: 12px 0;
+            border-radius: 30px;
+            font-weight: 600;
+            cursor: pointer;
+            transition: 0.2s;
+            width: 100%;
+            margin-top: auto;
+            font-size: 15px;
+        }
+        .add-btn:hover { background: #d35400; transform: scale(1.02); }
+        .add-btn:active { transform: scale(0.95); }
+        @media (max-width:600px) {
+            .header { flex-direction: column; align-items: stretch; }
+            .nav { justify-content: center; }
+            .filters { flex-direction: column; }
+        }
+    </style>
+</head>
+<body>
+
+<header class="header">
+    <div class="logo">📚 Все книгы</div>
+    <div class="nav">
+        <a href="#">⭐ Избранное</a>
+        <a href="#">🏠 главные меню</a>
+        <a href="#" class="cart">🛒 Карзина <span id="cartCount">0</span></a>
+        <div class="admin-btn">➕ Жаңы Китеп Кошуу (админ)</div>
+    </div>
+</header>
+
+<div class="filters">
+    <select id="categoryFilter">
+        <option value="all">Бардык категориялар</option>
+        <option value="илим">Илим/Окуу</option>
+        <option value="көркөм">Көркөм адабият</option>
+        <option value="балдар">Балдар үчүн</option>
+    </select>
+    <select id="sortFilter">
+        <option value="default">Сорттоо: Кирүү боюнча</option>
+        <option value="priceAsc">Баасы: Арзандан кымбатка</option>
+        <option value="priceDesc">Баасы: Кымбаттан арзанга</option>
+    </select>
+</div>
+
+<div class="book-grid" id="bookGrid"></div>
+
+<script>
+    // ===== КИТЕПТЕРДИН ТИЗМЕСИ (өзүңүз өзгөртө аласыз) =====
+    const books = [
+        { id:1, title:"Алгебра", author:"А. Абдыраев", price:567, rating:4, category:"илим", stock:true, emoji:"📐" },
+        { id:2, title:"Ак-Кеме", author:"Ч. Айтматов", price:900, rating:5, category:"көркөм", stock:true, emoji:"⛵" },
+        { id:3, title:"Математика 5-класс", author:"Б. Исмаилова", price:450, rating:4, category:"илим", stock:false, emoji:"🧮" },
+        { id:4, title:"Жусуп Баласагын", author:"Куттуу Билим", price:750, rating:5, category:"көркөм", stock:true, emoji:"📜" },
+        { id:5, title:"Эртегилер жыйнагы", author:"Элдик чыгарма", price:320, rating:4, category:"балдар", stock:true, emoji:"🧸" }
+    ];
+
+    let cartItems = 0;
+    const cartSpan = document.getElementById('cartCount');
+
+    function renderBooks(filteredBooks) {
+        const grid = document.getElementById('bookGrid');
+        grid.innerHTML = '';
+        filteredBooks.forEach(book => {
+            const stars = '⭐'.repeat(book.rating) + '☆'.repeat(5 - book.rating);
+            const stockText = book.stock ? '✅ Складда бар' : '❌ Склад жок';
+            const stockClass = book.stock ? '' : 'out';
+            const card = document.createElement('div');
+            card.className = 'book-card';
+            card.innerHTML = `
+                <div class="book-cover">${book.emoji}</div>
+                <div class="book-title">${book.title}</div>
+                <div class="book-author">👤 ${book.author}</div>
+                <div class="book-rating">${stars}</div>
+                <div class="book-price">${book.price} сом</div>
+                <div class="book-stock ${stockClass}">${stockText}</div>
+                <button class="add-btn" data-id="${book.id}">➕ Себетке кошуу</button>
+            `;
+            grid.appendChild(card);
+        });
+        document.querySelectorAll('.add-btn').forEach(btn => {
+            btn.addEventListener('click', function() {
+                cartItems++;
+                cartSpan.textContent = cartItems;
+                this.textContent = '✅ Кошулду';
+                this.style.background = '#27ae60';
+                setTimeout(() => {
+                    this.textContent = '➕ Себетке кошуу';
+                    this.style.background = '#e67e22';
+                }, 800);
+            });
+        });
+    }
+
+    function filterAndSort() {
+        const category = document.getElementById('categoryFilter').value;
+        const sort = document.getElementById('sortFilter').value;
+        let result = [...books];
+        if (category !== 'all') result = result.filter(b => b.category === category);
+        if (sort === 'priceAsc') result.sort((a,b) => a.price - b.price);
+        else if (sort === 'priceDesc') result.sort((a,b) => b.price - a.price);
+        renderBooks(result);
+    }
+
+    document.getElementById('categoryFilter').addEventListener('change', filterAndSort);
+    document.getElementById('sortFilter').addEventListener('change', filterAndSort);
+    filterAndSort();
+
+    // Админ баскычын көрсөтүү (консолго жазыңыз):
+    // document.querySelector('.admin-btn').style.display = 'inline-block';
+</script>
+</body>
+</html>

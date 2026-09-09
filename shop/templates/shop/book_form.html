@@ -1,0 +1,11 @@
+{% extends 'shop/base.html' %}
+
+{% block content %}
+<h2>{% if form.instance.id %}Китепти өзгөртүү{% else %}Жаңы китеп кошуу{% endif %}</h2>
+<form method="post">
+    {% csrf_token %}
+    {{ form.as_p }}
+    <button type="submit" class="btn btn-success">Сактоо</button>
+    <a href="{% url 'shop:book_list' %}" class="btn btn-secondary">Артка</a>
+</form>
+{% endblock %}

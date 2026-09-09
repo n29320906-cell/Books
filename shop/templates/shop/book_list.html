@@ -1,0 +1,59 @@
+<!DOCTYPE html>
+<html lang="ky">
+<head>
+    <meta charset="UTF-8">
+    <title>Китептер</title>
+    <style>
+        body { font-family: 'Segoe UI', sans-serif; background: linear-gradient(135deg, #667eea 0%, #764ba2 100%); margin: 0; padding: 40px; }
+        .container { max-width: 1000px; margin: 0 auto; background: white; padding: 30px; border-radius: 20px; box-shadow: 0 10px 30px rgba(0,0,0,0.3); }
+        h1 { text-align: center; }
+        .nav-links { text-align: center; margin-bottom: 30px; }
+        .nav-links a { margin: 0 10px; text-decoration: none; font-weight: bold; color: #555; }
+        .book-grid { display: grid; grid-template-columns: repeat(auto-fill, minmax(220px, 1fr)); gap: 20px; }
+        .book-card { background: #f9f9f9; border: 1px solid #eee; padding: 15px; border-radius: 15px; text-align: center; transition: 0.3s; }
+        .book-card:hover { transform: translateY(-5px); box-shadow: 0 5px 15px rgba(0,0,0,0.1); }
+        .book-title { font-weight: bold; }
+        .book-price { color: #ff6b6b; font-weight: bold; margin: 10px 0; }
+        .btn-view { background-color: #667eea; color: white; padding: 8px 15px; border-radius: 20px; text-decoration: none; font-size: 14px; }
+    </style>
+</head>
+<body>
+    <div class="container">
+        <h1>Бардык Китептер</h1>
+        <form method="GET" action="{% url 'book_list' %}" style="text-align: center; margin-bottom: 30px;">
+    <input type="text" name="q" value="{{ query }}" placeholder="Китептин атын же авторун жазыңыз..." style="padding: 12px; width: 300px; border-radius: 25px; border: 1px solid #ddd; outline: none;">
+    <button type="submit" class="btn btn-primary">🔍 Издөө</button>
+</form>
+
+<!-- Эгер издөө натыйжасыз болсо же натыйжалар табылса -->
+{% if query %}
+    <p style="text-align: center; color: #777;">Издөө натыйжасы: {{ books|length }} китеп табылды</p>
+{% endif %}
+        <div class="nav-links">
+            <a href="/favorites/" class="nav-link-primary" style="background-color: #ff6b6b;">❤️ Избранное</a>
+            <a href="/">Башкы бет</a>
+            <a href="/cart/" class="nav-link-primary" style="background-color: #4CAF50;">🛒 Корзина</a>
+            <a href="/add/">Жаңы Китеп Кошуу</a>
+<!--            <a href="/favorites/">❤️ Избранное</a>-->
+        </div>
+        {% if books %}
+            <div class="book-grid">
+                {% for book in books %}
+                    <div class="book-card">
+                        {% if book.image %}
+                            <img src="{{ book.image.url }}" style="width: 100%; height: 180px; object-fit: cover; border-radius: 10px;">
+                        {% else %}
+                            <div style="height: 180px; display: flex; align-items: center; justify-content: center; background: #eee; border-radius: 10px; font-size: 40px;">📖</div>
+                        {% endif %}
+                        <p class="book-title">{{ book.title }}</p>
+                        <p class="book-price">{{ book.price }} сом</p>
+                        <a href="/book/{{ book.pk }}/" class="btn-view">Кененирээк</a>
+                    </div>
+                {% endfor %}
+            </div>
+        {% else %}
+            <p style="text-align: center;">Азырынча китептер жок.</p>
+        {% endif %}
+    </div>
+</body>
+</html>

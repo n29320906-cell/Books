@@ -1,0 +1,61 @@
+<!DOCTYPE html>
+<html lang="ky">
+<head>
+    <meta charset="UTF-8">
+    <title>{{ book.title }}</title>
+    <style>
+        body { font-family: 'Segoe UI', sans-serif; background: linear-gradient(135deg, #667eea 0%, #764ba2 100%); margin: 0; padding: 20px; color: #333; }
+        .container { max-width: 800px; margin: 0 auto; background: white; border-radius: 20px; padding: 30px; box-shadow: 0 10px 30px rgba(0,0,0,0.2); }
+        h1 { text-align: center; }
+        .content { display: flex; gap: 30px; }
+        .image-box { flex: 1; }
+        .image-box img { width: 100%; border-radius: 15px; }
+        .info { flex: 1; }
+        .info p { font-size: 18px; }
+        .btn { display: inline-block; border: none; padding: 12px 20px; border-radius: 8px; color: white; cursor: pointer; font-size: 16px; margin-top: 10px; width: 100%; }
+        .btn-fav { background-color: #ff6b6b; }
+        .btn-cart { background-color: #4CAF50; }
+        .btn-back { background-color: #667eea; text-decoration: none; text-align: center; display: block; margin-top: 20px; }
+        a { text-decoration: none; }
+    </style>
+</head>
+<body>
+    <div class="container">
+        <h1>{{ book.title }}</h1>
+        <div class="content">
+            <div class="image-box">
+                {% if book.image %}
+                    <img src="{{ book.image.url }}">
+                {% else %}
+                    <div style="width: 100%; height: 300px; background: #eee; display: flex; align-items: center; justify-content: center;">Сүрөт жок</div>
+                {% endif %}
+            </div>
+
+            <div class="info">
+                <p><strong>Автору:</strong> {{ book.author }}</p>
+                <p><strong>Жанры:</strong> {{ book.genre }}</p>
+                <p><strong>Баасы:</strong> {{ book.price }} сом</p>
+                <p><strong>Сүрөттөмө:</strong> {{ book.description }}</p>
+
+                {% if user.is_authenticated %}
+                    <!-- Избранноеге кошуу формасы -->
+                    <form method="post" action="{% url 'toggle_favorite' book.pk %}">
+                        {% csrf_token %}
+                        <button type="submit" class="btn btn-fav">❤️ Избранноеге кошуу</button>
+                    </form>
+
+                    <!-- Корзинага кошуу формасы -->
+                    <form method="post" action="{% url 'add_to_cart' book.pk %}" style="margin-top: 10px;">
+                        {% csrf_token %}
+                        <button type="submit" class="btn btn-cart">🛒 Корзинага кошуу</button>
+                    </form>
+                {% else %}
+                    <p style="color: red; margin-top: 20px;">Избранноеге же Корзинага кошуу үчүн <a href="/admin/">системага кириңиз</a>.</p>
+                {% endif %}
+            </div>
+        </div>
+
+        <a href="/books/" class="btn btn-back">← Артка кайтуу</a>
+    </div>
+</body>
+</html>

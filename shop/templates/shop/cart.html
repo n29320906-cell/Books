@@ -1,0 +1,77 @@
+<!DOCTYPE html>
+<html lang="ky">
+<head>
+    <meta charset="UTF-8">
+    <title>Корзина</title>
+    <style>
+        body { font-family: 'Segoe UI', sans-serif; background: linear-gradient(135deg, #667eea 0%, #764ba2 100%); margin: 0; padding: 20px; color: #333; }
+        .container { max-width: 800px; margin: 0 auto; background: white; border-radius: 20px; padding: 30px; box-shadow: 0 10px 30px rgba(0,0,0,0.2); }
+        h1 { text-align: center; }
+        .item { border-bottom: 1px solid #eee; padding: 15px 0; display: flex; justify-content: space-between; align-items: center; }
+        .item-details { flex: 1; }
+        .item-actions { display: flex; gap: 15px; align-items: center; }
+        .btn { display: inline-block; border: none; padding: 10px 15px; border-radius: 8px; color: white; cursor: pointer; font-size: 14px; text-decoration: none; }
+        .btn-danger { background-color: #ff6b6b; }
+        .btn-back { background-color: #667eea; text-decoration: none; text-align: center; display: block; margin-top: 30px; }
+        .btn-checkout { background-color: #4CAF50; color: white; display: block; text-align: center; margin-top: 10px; }
+        .total-price { font-weight: bold; font-size: 20px; text-align: right; margin-top: 20px; }
+
+        /* Санын өзгөртүү баскычтары */
+        .quantity-control { display: flex; align-items: center; gap: 8px; margin-right: 10px; }
+        .quantity-btn { width: 32px; height: 32px; border-radius: 50%; border: 1px solid #ddd; background: #f0f0f0; cursor: pointer; font-size: 18px; font-weight: bold; display: flex; justify-content: center; align-items: center; transition: all 0.2s; }
+        .quantity-btn:hover { background: #e0e0e0; }
+        .quantity-btn.plus { background: #4CAF50; color: white; border: none; }
+        .quantity-btn.plus:hover { background: #45a049; }
+        .quantity-number { font-size: 18px; font-weight: bold; min-width: 20px; text-align: center; }
+    </style>
+</head>
+<body>
+    <div class="container">
+        <h1>🛒 Корзина</h1>
+
+        {% if items %}
+            <ul style="list-style: none; padding: 0;">
+                {% for item in items %}
+                    <li class="item">
+                        <div class="item-details">
+                            <strong>{{ item.book.title }}</strong><br>
+                            <span style="color: #777;">{{ item.book.price }} сом / даана</span>
+                        </div>
+
+                        <div class="item-actions">
+                            <!-- Санын өзгөртүү -->
+                            <div class="quantity-control">
+                                <form method="post" action="{% url 'decrease_quantity' item.pk %}" style="margin: 0;">
+                                    {% csrf_token %}
+                                    <button type="submit" class="quantity-btn">−</button>
+                                </form>
+                                <span class="quantity-number">{{ item.quantity }}</span>
+                                <form method="post" action="{% url 'increase_quantity' item.pk %}" style="margin: 0;">
+                                    {% csrf_token %}
+                                    <button type="submit" class="quantity-btn plus">+</button>
+                                </form>
+                            </div>
+
+                            <!-- Өчүрүү -->
+                            <form method="post" action="{% url 'remove_from_cart' item.pk %}" style="margin: 0;">
+                                {% csrf_token %}
+                                <button type="submit" class="btn btn-danger">🗑️ Өчүрүү</button>
+                            </form>
+                        </div>
+                    </li>
+                {% endfor %}
+            </ul>
+
+            <div class="total-price">
+                Жалпы сумма: {{ total }} сом
+            </div>
+
+            <a href="{% url 'checkout' %}" class="btn btn-checkout">✅ Буйрутма берүү (Checkout)</a>
+        {% else %}
+            <p style="text-align: center; color: #777;">Корзина бош. <a href="/books/">Китептерди караңыз</a>.</p>
+        {% endif %}
+
+        <a href="/books/" class="btn btn-back">← Артка кайтуу</a>
+    </div>
+</body>
+</html>

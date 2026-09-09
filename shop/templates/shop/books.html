@@ -1,0 +1,77 @@
+{% extends 'shop/base.html' %}
+
+{% block content %}
+
+<h1>📚 Бардык китептер</h1>
+
+<form method="GET">
+
+    <input
+        type="text"
+        name="search"
+        placeholder="Китеп издөө..."
+        value="{{ request.GET.search }}"
+    >
+
+    <select name="category">
+
+        <option value="">Бардык жанрлар</option>
+
+        {% for category in categories %}
+
+        <option value="{{ category.id }}">
+            {{ category.name }}
+        </option>
+
+        {% endfor %}
+
+    </select>
+
+    <button class="btn" type="submit">
+        Издөө
+    </button>
+
+</form>
+
+<br>
+
+<div class="books">
+
+    {% for book in books %}
+
+    <div class="book">
+
+        {% if book.image %}
+            <img src="{{ book.image.url }}" alt="{{ book.title }}">
+        {% else %}
+            <div class="no-image">
+                📚 Сүрөт жок
+            </div>
+        {% endif %}
+
+        <h3>{{ book.title }}</h3>
+
+        <p>{{ book.author }}</p>
+
+        <p class="price">
+            {{ book.price }} сом
+        </p>
+
+        <a
+            href="{% url 'book_detail' book.id %}"
+            class="btn"
+        >
+            Көрүү
+        </a>
+
+    </div>
+
+    {% empty %}
+
+    <p>Китеп табылган жок.</p>
+
+    {% endfor %}
+
+</div>
+
+{% endblock %}

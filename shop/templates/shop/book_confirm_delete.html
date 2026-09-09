@@ -1,0 +1,14 @@
+{% extends 'shop/base.html' %}
+
+{% block content %}
+<div class="card border-danger">
+    <div class="card-body">
+        <h3 class="text-danger">"{{ book.title }}" китебин өчүрүүнү тастыктайсызбы?</h3>
+        <form method="post">
+            {% csrf_token %}
+            <button type="submit" class="btn btn-danger">Ооба, өчүр</button>
+            <a href="{% url 'shop:book_list' %}" class="btn btn-secondary">Жок, артка</a>
+        </form>
+    </div>
+</div>
+{% endblock %}

@@ -1,0 +1,5 @@
+{% if book.image %}
+    <img src="{{ book.image.url }}" alt="{{ book.title }}">
+{% else %}
+    <p>Сүрөт жок</p>
+{% endif %}

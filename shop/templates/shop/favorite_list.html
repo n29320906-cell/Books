@@ -1,0 +1,34 @@
+{<!DOCTYPE html>
+<html lang="ky">
+<head>
+    <meta charset="UTF-8">
+    <title>Менин Избранное</title>
+    <style>
+        body { font-family: 'Segoe UI', sans-serif; background: linear-gradient(135deg, #667eea 0%, #764ba2 100%); margin: 0; padding: 40px; }
+        .container { max-width: 800px; margin: 0 auto; background: white; padding: 30px; border-radius: 20px; box-shadow: 0 10px 30px rgba(0,0,0,0.3); }
+        h1 { text-align: center; }
+        .item { border-bottom: 1px solid #eee; padding: 15px 0; display: flex; justify-content: space-between; align-items: center; }
+        .btn-view { background-color: #667eea; color: white; text-decoration: none; padding: 8px 15px; border-radius: 20px; }
+    </style>
+</head>
+<body>
+    <div class="container">
+        <h1>❤️ Менин Избранное</h1>
+        {% if favorites %}
+            <ul style="list-style: none; padding: 0;">
+                {% for fav in favorites %}
+                    <li class="item">
+                        <div>
+                            <strong>{{ fav.book.title }}</strong> ({{ fav.book.author }}) - {{ fav.book.price }} сом
+                        </div>
+                        <a href="/book/{{ fav.book.pk }}/" class="btn-view">Көрүү</a>
+                    </li>
+                {% endfor %}
+            </ul>
+        {% else %}
+            <p style="text-align: center;">Азырынча избранное жок.</p>
+        {% endif %}
+        <a href="/books/" style="display: block; text-align: center; margin-top: 20px; color: #ff6b6b; font-weight: bold;">Китептерге кайтуу</a>
+    </div>
+</body>
+</html>

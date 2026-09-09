@@ -1,0 +1,123 @@
+<!DOCTYPE html>
+<html lang="ky">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Китеп Дүкөнү</title>
+    <style>
+        /* Негизги фон жана шрифт */
+        body {
+            margin: 0;
+            font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+            background: linear-gradient(135deg, #667eea 0%, #764ba2 100%); /* Кооз градиент */
+            min-height: 100vh;
+            display: flex;
+            justify-content: center;
+            align-items: center;
+            color: white;
+        }
+
+        /* Борбордук кутуча (Card) */
+        .container {
+            text-align: center;
+            background: rgba(255, 255, 255, 0.15); /* Жеңил тунук ак */
+            backdrop-filter: blur(10px); /* Фонду бүдөмүк кылуу эффекти */
+            padding: 60px 80px;
+            border-radius: 20px;
+            box-shadow: 0 10px 30px rgba(0, 0, 0, 0.3); /* Жумшак көлөкө */
+            border: 1px solid rgba(255, 255, 255, 0.3);
+        }
+
+        /* Китеп иконкасы (Эмодзи) */
+        .icon {
+            font-size: 80px;
+            margin-bottom: 20px;
+            animation: float 3s ease-in-out infinite; /* Анимация */
+        }
+
+        h1 {
+            font-size: 42px;
+            font-weight: 700;
+            margin: 0 0 10px 0;
+            text-shadow: 2px 2px 4px rgba(0,0,0,0.3);
+        }
+
+        p {
+            font-size: 18px;
+            opacity: 0.9;
+            margin-bottom: 40px;
+            line-height: 1.5;
+        }
+
+        /* Кнопкалардын стили */
+        .btn-group {
+            display: flex;
+            gap: 15px;
+            justify-content: center;
+        }
+
+        .btn {
+            padding: 14px 30px;
+            font-size: 16px;
+            font-weight: 600;
+            text-decoration: none;
+            border-radius: 50px; /* Толук тегерек кнопка */
+            transition: all 0.3s ease;
+            border: none;
+            cursor: pointer;
+        }
+
+        /* Биринчи кнопка (Толук) */
+        .btn-primary {
+            background-color: #ff6b6b;
+            color: white;
+            box-shadow: 0 4px 15px rgba(255, 107, 107, 0.4);
+        }
+
+        .btn-primary:hover {
+            background-color: #ff5252;
+            transform: translateY(-3px); /* Көтөрүлүп кетет */
+            box-shadow: 0 6px 20px rgba(255, 107, 107, 0.6);
+        }
+
+        /* Экинчи кнопка (Тунук) */
+        .btn-secondary {
+            background-color: transparent;
+            color: white;
+            border: 2px solid white;
+        }
+
+        .btn-secondary:hover {
+            background-color: white;
+            color: #764ba2;
+            transform: translateY(-3px);
+        }
+
+        /* Китептин калкып жүрүү анимациясы */
+        @keyframes float {
+            0% { transform: translateY(0px); }
+            50% { transform: translateY(-10px); }
+            100% { transform: translateY(0px); }
+        }
+    </style>
+</head>
+<body>
+    <div class="container">
+        <!-- Иконка (Эмодзи) -->
+        <div class="icon">📚</div>
+
+        <h1>Китеп Дүкөнү</h1>
+
+        <p>Кызыктуу окуяларга жана билимге толгон<br>кереметтүү дүйнөгө кош келиңиз!</p>
+
+        <div class="btn-group">
+            <a href="/books/" class="btn btn-primary">Китептерди Көрүү</a>
+            <a href="/favorites/" class="btn btn-secondary">❤️ Избранное</a>
+            <a href="/cart/" class="btn btn-secondary">🛒 Корзина</a>
+          <a href="{% url 'register' %}" class="account-btn">
+    👤 Аккаунт ачуу
+</a>
+        </div>
+    </div>
+</body>
+</html>
