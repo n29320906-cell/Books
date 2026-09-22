@@ -1,18 +1,19 @@
 <!DOCTYPE html>
-<html>
+<html lang="ru">
 <head>
-    <title>Кирүү</title>
+    <meta charset="UTF-8">
+    <title>Вход</title>
 </head>
 <body>
 
-<h1>Кирүү</h1>
+<h1>Вход в аккаунт</h1>
 
 <form method="post">
     {% csrf_token %}
 
     {{ form.as_p }}
 
-    <button type="submit">Кирүү</button>
+    <button type="submit">Войти</button>
 </form>
 
 </body>
